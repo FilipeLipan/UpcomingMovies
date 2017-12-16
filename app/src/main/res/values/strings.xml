@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UpcomingMovies</string>
+    <string name="main_activity_name">Main</string>
 </resources>
