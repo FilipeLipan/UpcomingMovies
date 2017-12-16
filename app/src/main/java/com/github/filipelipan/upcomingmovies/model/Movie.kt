@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName
 open class Movie {
     open var id: Int = 0
     @SerializedName("original_title")
-    open var originalTitle: String? = ""
+    open var originalTitle: String = ""
     @SerializedName("poster_path")
-    open var posterPath: String? = null
-    open var overview: String? = null
+    open var posterPath: String = ""
+    open var overview: String = ""
     @SerializedName("vote_average")
     open var voteAverage: Double = 0.toDouble()
     @SerializedName("release_date")

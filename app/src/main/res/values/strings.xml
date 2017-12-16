@@ -2,4 +2,7 @@
     <string name="app_name">UpcomingMovies</string>
     <string name="main_activity_name">Main</string>
     <string name="movies_grid_title">Movies Grid</string>
+
+    <string name="load_failed">Loading failed</string>
+    <string name="load_end"></string>
 </resources>
