@@ -16,11 +16,14 @@
 
 package com.github.filipelipan.upcomingmovies.di
 
+import com.github.filipelipan.upcomingmovies.ui.movies_grid.MoviesGridFragment
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 
 @Module
 abstract class FragmentBuildersModule{
 
-
+    @ContributesAndroidInjector
+    internal abstract fun contributeHomeFragment(): MoviesGridFragment
 }

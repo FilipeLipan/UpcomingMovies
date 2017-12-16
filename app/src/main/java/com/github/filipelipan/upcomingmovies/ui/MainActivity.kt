@@ -2,14 +2,14 @@ package com.github.filipelipan.upcomingmovies.ui
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.FrameLayout
 import com.github.filipelipan.upcomingmovies.R
-import com.github.filipelipan.upcomingmovies.ui.common.BaseActivity
 import com.github.filipelipan.upcomingmovies.ui.common.BaseFragment
 import com.github.filipelipan.upcomingmovies.ui.common.BaseFragmentActivity
+import com.github.filipelipan.upcomingmovies.ui.movies_grid.MoviesGridFragment
+import kotlinx.android.synthetic.main.include_container.*
+import kotlinx.android.synthetic.main.include_toolbar.*
 
 class MainActivity : BaseFragmentActivity<ViewModel>() {
 
@@ -20,11 +20,11 @@ class MainActivity : BaseFragmentActivity<ViewModel>() {
     override val activityLayout: Int
         get() = R.layout.activity_main
     override val container: FrameLayout
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = _vContainer
     override val toolbar: Toolbar
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = _vToolbar
     override val initialFragment: BaseFragment<*>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = MoviesGridFragment.newInstance()
 
 
 }

@@ -20,7 +20,7 @@ abstract class BaseFragment<out V: ViewModel> : Fragment(), Injectable {
     abstract val fragmentName: String
     abstract val fragmentLayout: Int
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater!!.inflate(fragmentLayout, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(fragmentLayout, container, false)
 
 }
