@@ -12,6 +12,8 @@ import com.github.filipelipan.upcomingmovies.ui.common.BaseFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -19,8 +21,13 @@ import javax.inject.Inject
  */
 class MoviesGridFragment : BaseFragment<MoviesGridViewModel>() {
 
+    val minDate by lazy {
+        SimpleDateFormat(RELEASE_DATE_FORMAT).format(Calendar.getInstance().getTime())
+    }
+
     companion object {
         fun newInstance() = MoviesGridFragment()
+        val RELEASE_DATE_FORMAT = "yyyy-MM-dd";
     }
 
     @Inject
@@ -39,7 +46,7 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        restApi.getMovieList()
+        restApi.getMoviesList("1","en-US",minDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object: DisposableObserver<PagedResponse<Movie>>() {
