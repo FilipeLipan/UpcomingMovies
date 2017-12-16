@@ -24,6 +24,25 @@ android {
             }
         }
     }
+
+    buildTypes.each {
+        it.buildConfigField 'String', 'MOVIES_DB_API_KEY', MyMoviesDBApiKey
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        dev {
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+            buildConfigField 'String', 'HOST', '"https://api.themoviedb.org/3/"'
+        }
+        prod {
+            applicationIdSuffix ".prod"
+            versionNameSuffix "-prod"
+            buildConfigField 'String', 'HOST', '"https://api.themoviedb.org/3/"'
+        }
+    }
 }
 
 kapt {
