@@ -34,7 +34,12 @@ abstract class BaseFragmentActivity<V : ViewModel> : AppCompatActivity(), IBaseF
         super.onCreate(savedInstanceState)
         setContentView(activityLayout)
         setSupportActionBar(toolbar)
-        replaceFragment(initialFragment)
+
+        if(supportFragmentManager.findFragmentByTag(initialFragment.fragmentTag) != null){
+            replaceFragment(supportFragmentManager.findFragmentByTag(initialFragment.fragmentTag))
+        }else{
+            addFragment(initialFragment)
+        }
     }
 
     override fun setTitle(title: String) {
@@ -51,6 +56,17 @@ abstract class BaseFragmentActivity<V : ViewModel> : AppCompatActivity(), IBaseF
             ft.replace(container!!.id, fragment, fragment.fragmentTag)
         } else {
             ft.replace(container!!.id, fragment, fragment.javaClass.simpleName)
+        }
+
+        ft.commit()
+    }
+
+    override fun addFragment(fragment: Fragment) {
+        val ft = fragmentTransaction
+        if (fragment is BaseFragment<*>) {
+            ft.add(container!!.id, fragment, fragment.fragmentTag)
+        } else {
+            ft.add(container!!.id, fragment, fragment.javaClass.simpleName)
         }
 
         ft.commit()

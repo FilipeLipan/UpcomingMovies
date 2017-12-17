@@ -28,5 +28,6 @@ public interface IRestApiService {
     @GET("search/movie")
     fun searchMovie(@Query("page") page: String,
                      @Query("query") query: String,
-                     @Query("language") language: String) : Observable<PagedResponse<Movie>>
+                     @Query("language") language: String,
+                     @Query("primary_release_date.gte") minReleaseDate: String) : Observable<PagedResponse<Movie>>
 }

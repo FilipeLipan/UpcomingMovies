@@ -2,11 +2,14 @@ package com.github.filipelipan.upcomingmovies.ui.movies_grid
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.SearchView
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.github.filipelipan.upcomingmovies.R
 import com.github.filipelipan.upcomingmovies.livedata_resources.Status.*
@@ -17,12 +20,23 @@ import com.github.filipelipan.upcomingmovies.util.extensions.calculateNoOfColumn
 import kotlinx.android.synthetic.main.fragment_movies_grid.*
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.functions.Predicate
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by lispa on 16/12/2017.
  */
 class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.RequestLoadMoreListener,
         SwipeRefreshLayout.OnRefreshListener {
+
+    lateinit var mSearchView: SearchView
+
+    var compositeDisposable = CompositeDisposable()
 
     val mMoviesAdapter by lazy {
         MoviesAdapter(context, ArrayList<Movie>())
@@ -48,13 +62,15 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+//        appActivityListener!!.setTitle("Movies")
 
         initAdapter()
 
         _vSwipeRefreshLayout.setOnRefreshListener(this)
 
         if(savedInstanceState == null) {
-            mViewModel.getMovies(mMinDate, false);
+            mViewModel.getMovies(mViewModel.search,mMinDate, false);
         }
 
         mViewModel.mMovies.observe(this, Observer {
@@ -94,6 +110,37 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater?.inflate(R.menu.movies_search_menu, menu);
+
+        val item = menu?.findItem(R.id.search_movies)
+
+        mSearchView = item?.actionView as SearchView
+        setUpSearch()
+    }
+
+    private fun setUpSearch(){
+        compositeDisposable.add(RxSearchObservable.fromView(mSearchView)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .filter(object : Predicate<String> {
+                    @Throws(Exception::class)
+                    override fun test(searchText: String): Boolean {
+                        return !searchText.isEmpty()
+                    }
+                })
+                .distinctUntilChanged()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Consumer<String> {
+                    @Throws(Exception::class)
+                    override fun accept(searchText: String) {
+                        mViewModel.getMovies(searchText,mMinDate, false);
+                    }
+                }))
+    }
+
     private fun initAdapter() {
         mMoviesAdapter.setOnLoadMoreListener(this, _vMoviesRecyclerRV)
         mMoviesAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
@@ -104,11 +151,19 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
 
     override fun onLoadMoreRequested() {
         _vSwipeRefreshLayout.setEnabled(false)
-        mViewModel.getMovies(mMinDate, true);
+        mViewModel.getMovies(mViewModel.search,mMinDate, true);
     }
 
     override fun onRefresh() {
-        mViewModel.getMovies(mMinDate, false);
+        mViewModel.getMovies(mSearchView.query.toString(),mMinDate, false);
     }
 
+    //TODO find solution to access view model in onDestroy
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        compositeDisposable.clear()
+//
+//        //TODO refactor this
+//        mViewModel.detachView()
+//    }
 }

@@ -20,21 +20,32 @@ import javax.inject.Inject
 class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : ViewModel() {
     var nextPage = 1
 
+    var search = ""
+
     val disposables = CompositeDisposable();
 
     val mMovies = MutableLiveData<PagedResource<ArrayList<Movie>>>()
 
-    fun getMovies(minDate: String, isLoadMore: Boolean) {
-          if(isLoadMore){
+    fun getMovies(searchQuery: String,minDate: String, isLoadMore: Boolean) {
+        if(isLoadMore){
             nextPage += 1
         }else{
             nextPage = 1
         }
 
-        addDisposable(restApi.getMoviesList(nextPage.toString(), "en-US", minDate)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(movieSubscriber(isLoadMore)));
+        search = searchQuery
+
+        if(search.equals("")){
+            addDisposable(restApi.getMoviesList(nextPage.toString(), "en-US", minDate)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(movieSubscriber(isLoadMore)));
+        }else{
+            addDisposable(restApi.searchMovie(nextPage.toString(), searchQuery, "en-US", minDate)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(movieSubscriber(isLoadMore)));
+        }
     }
 
     fun movieSubscriber(isLoadMore: Boolean) : DisposableObserver<PagedResponse<Movie>> {
@@ -44,9 +55,7 @@ class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : Vi
                 Log.d("", "")
             }
 
-            override fun onComplete() {
-
-            }
+            override fun onComplete() {}
 
             override fun onNext(movies: PagedResponse<Movie>) {
                 if(isLoadMore){
