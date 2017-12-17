@@ -2,11 +2,17 @@ package com.github.filipelipan.upcomingmovies.ui.movie_detail
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.github.filipelipan.upcomingmovies.BuildConfig
 import com.github.filipelipan.upcomingmovies.R
 import com.github.filipelipan.upcomingmovies.model.Movie
 import com.github.filipelipan.upcomingmovies.ui.common.BaseFragment
 import com.github.filipelipan.upcomingmovies.ui.movies_grid.MoviesGridFragment
+import kotlinx.android.synthetic.main.a_include_movie_detail.*
+import kotlinx.android.synthetic.main.fragment_movie_detail.*
 
 /**
  * Created by lispa on 17/12/2017.
@@ -38,6 +44,19 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
         if (arguments != null && arguments!!.containsKey(MOVIE_KEY)) {
             mMovie = arguments!!.getParcelable(MOVIE_KEY)
+
+            _vMovieTitleTV.text = mMovie.originalTitle
+
+            _vReleaseDateTV.text = mMovie.releaseDate
+
+            _vRateTV.text = mMovie.voteAverage.toString() + "/10"
+
+            _vOverViewTV.text = mMovie.overview
+
+            Glide.with(context)
+                    .load(BuildConfig.BASE_POSTER_URL_HD + mMovie.posterPath)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(_vPosterKBV)
         }
     }
 }

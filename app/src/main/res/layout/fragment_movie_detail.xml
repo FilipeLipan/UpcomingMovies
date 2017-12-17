@@ -4,16 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fafafa"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <com.github.florent37.arclayout.ArcLayout
             android:id="@+id/diagonalLayout"
@@ -24,36 +22,36 @@
             android:layout_alignParentTop="true"
             android:elevation="10dip"
             app:arc_cropDirection="cropOutside"
-            app:arc_position="bottom"
             app:arc_height="50dp"
-            >
+            app:arc_position="bottom">
 
             <com.flaviofaria.kenburnsview.KenBurnsView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/_vPosterKBV"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background"
-                />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-
-                <TextView
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginBottom="30dp"
-                    android:adjustViewBounds="true"
-                    android:text="titulo" />
-
-            </FrameLayout>
+                android:src="@drawable/ic_launcher_background" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/gradient_shadow"/>
+                android:background="@drawable/gradient_shadow" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/_vMovieTitleTV"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_marginBottom="50dp"
+                    android:adjustViewBounds="true"
+                    style="@style/BoldTextViewWithShadow"
+                    android:text="titulo" />
+
+            </FrameLayout>
 
         </com.github.florent37.arclayout.ArcLayout>
 
@@ -66,39 +64,14 @@
             android:src="@drawable/ic_search"
             app:backgroundTint="#ce471d"
             app:elevation="15dp"
-            app:fabSize="normal"
-            />
+            app:fabSize="normal" />
 
-        <LinearLayout
+        <include
+            layout="@layout/a_include_movie_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/diagonalLayout"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:padding="20dp"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="sans-serif"
-                android:text="Story"
-                android:textColor="#3A3A3A"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:fontFamily="sans-serif"
-                android:text="description"
-                android:textColor="#979696"
-                android:textSize="15sp"
-                />
-        </LinearLayout>
+            android:layout_marginTop="10dp" />
 
     </RelativeLayout>
 

@@ -38,7 +38,7 @@ android {
             versionNameSuffix "-dev"
             buildConfigField 'String', 'HOST', '"https://api.themoviedb.org/3/"'
             buildConfigField 'String', 'BASE_POSTER_URL', '"http://image.tmdb.org/t/p/w185"'
-            buildConfigField 'String', 'BASE_POSTER_URL_HD', '"http://image.tmdb.org/t/p/w500"'
+            buildConfigField 'String', 'BASE_POSTER_URL_HD', '"http://image.tmdb.org/t/p/w342"'
         }
         prod {
             applicationIdSuffix ".prod"
