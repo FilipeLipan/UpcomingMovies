@@ -22,10 +22,10 @@ class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : Vi
 
     val disposables = CompositeDisposable();
 
-    val mMovies = MutableLiveData<PagedResource<List<Movie>>>()
+    val mMovies = MutableLiveData<PagedResource<ArrayList<Movie>>>()
 
     fun getMovies(minDate: String, isLoadMore: Boolean) {
-        if(isLoadMore){
+          if(isLoadMore){
             nextPage += 1
         }else{
             nextPage = 1
@@ -48,7 +48,7 @@ class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : Vi
 
                             override fun onNext(movies: PagedResponse<Movie>) {
                                 if(isLoadMore){
-                                    mMovies.value = PagedResource.successMoreData(movies.results, nextPage < movies.totalPages)
+                                    mMovies.value = PagedResource.successMoreData(mMovies.value!!.data, movies.results, nextPage < movies.totalPages)
                                 }else{
                                     mMovies.value = PagedResource.success(movies.results, nextPage < movies.totalPages)
                                 }

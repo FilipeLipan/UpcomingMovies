@@ -72,11 +72,11 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                     SUCCESS_LOAD_MORE_DATA -> {
                         _vSwipeRefreshLayout.setEnabled(false)
                         if (!it.hasMorePages) {
-                            participantsAdapter.addData(it.data!!)
+                            participantsAdapter.addData(it.newData!!)
                             participantsAdapter.loadMoreEnd(true)
                             _vSwipeRefreshLayout.setEnabled(true)
                         } else {
-                            participantsAdapter.addData(it.data!!)
+                            participantsAdapter.addData(it.newData!!)
                             participantsAdapter.loadMoreComplete()
                             _vSwipeRefreshLayout.setEnabled(true)
                         }

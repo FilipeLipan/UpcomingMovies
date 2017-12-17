@@ -11,5 +11,5 @@ open class PagedResponse<T> {
     @SerializedName("total_pages")
     open var totalPages: Int = 0
     open var page: Int = 1
-    open var results: List<T> = mutableListOf()
+    open var results: ArrayList<T> = ArrayList()
 }
