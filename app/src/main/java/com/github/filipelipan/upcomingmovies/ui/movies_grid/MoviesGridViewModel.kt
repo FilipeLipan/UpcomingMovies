@@ -31,29 +31,31 @@ class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : Vi
             nextPage = 1
         }
 
-
         addDisposable(restApi.getMoviesList(nextPage.toString(), "en-US", minDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(
-                        object : DisposableObserver<PagedResponse<Movie>>() {
-                            override fun onError(e: Throwable) {
-                                //TODO handle error
-                                Log.d("", "")
-                            }
+                .subscribeWith(movieSubscriber(isLoadMore)));
+    }
 
-                            override fun onComplete() {
+    fun movieSubscriber(isLoadMore: Boolean) : DisposableObserver<PagedResponse<Movie>> {
+        return object : DisposableObserver<PagedResponse<Movie>>() {
+            override fun onError(e: Throwable) {
+                //TODO handle error
+                Log.d("", "")
+            }
 
-                            }
+            override fun onComplete() {
 
-                            override fun onNext(movies: PagedResponse<Movie>) {
-                                if(isLoadMore){
-                                    mMovies.value = PagedResource.successMoreData(mMovies.value!!.data, movies.results, nextPage < movies.totalPages)
-                                }else{
-                                    mMovies.value = PagedResource.success(movies.results, nextPage < movies.totalPages)
-                                }
-                            }
-                        }));
+            }
+
+            override fun onNext(movies: PagedResponse<Movie>) {
+                if(isLoadMore){
+                    mMovies.value = PagedResource.successMoreData(mMovies.value!!.data, movies.results, nextPage < movies.totalPages)
+                }else{
+                    mMovies.value = PagedResource.success(movies.results, nextPage < movies.totalPages)
+                }
+            }
+        }
     }
 
     fun addDisposable(disposable: Disposable) {
