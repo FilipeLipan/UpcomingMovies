@@ -26,7 +26,8 @@ import io.reactivex.functions.Consumer
 import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-
+import com.chad.library.adapter.base.listener.OnItemClickListener
+import com.github.filipelipan.upcomingmovies.ui.movie_detail.MovieDetailFragment
 
 /**
  * Created by lispa on 16/12/2017.
@@ -36,6 +37,8 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
 
     lateinit var mSearchView: SearchView
 
+    var mShouldReload: Boolean = false
+
     var compositeDisposable = CompositeDisposable()
 
     val mMoviesAdapter by lazy {
@@ -43,12 +46,12 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
     }
 
     val mMinDate by lazy {
-        SimpleDateFormat(RELEASE_DATE_FORMAT).format(Calendar.getInstance().getTime())
+        SimpleDateFormat(RELEASE_DATE_FORMAT).format(Calendar.getInstance().time)
     }
 
     companion object {
         fun newInstance() = MoviesGridFragment()
-        val RELEASE_DATE_FORMAT = "yyyy-MM-dd";
+        val RELEASE_DATE_FORMAT = "yyyy-MM-dd"
     }
 
     override val mViewModel: MoviesGridViewModel
@@ -70,54 +73,85 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
         _vSwipeRefreshLayout.setOnRefreshListener(this)
 
         if(savedInstanceState == null) {
-            mViewModel.getMovies(mViewModel.search,mMinDate, false);
+            mViewModel.getMovies(mViewModel.search,mMinDate, false)
+        }else{
+            mShouldReload = true
         }
+
+        mMoviesAdapter.setOnItemClickListener(object: BaseQuickAdapter.OnItemClickListener {
+            override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+                appActivityListener!!.replaceAndBackStackFragment(MovieDetailFragment.newInstance(adapter!!.getItem(position) as Movie))
+            }
+        })
+
 
         mViewModel.mMovies.observe(this, Observer {
 
-            if (it != null) {
-                when (it.status) {
-                    SUCCESS -> {
-                        mMoviesAdapter.setEnableLoadMore(false)
-                        //TODO set up empty view
-                        mMoviesAdapter.setNewData(it.data)
-//            mMoviesAdapter.setEmptyView(getAppActivityListener().inflateView(R.layout.include_empty_view, participantsRecycler))
-                        _vSwipeRefreshLayout.setRefreshing(false)
+            if(mShouldReload){
+                mMoviesAdapter.setNewData(it!!.data)
+                mShouldReload = false
+            }else {
 
-                        //TODO make logic to discover if all itens are loaded
+                if (it != null) {
+                    when (it.status) {
+                        SUCCESS -> {
+                            mMoviesAdapter.setEnableLoadMore(false)
+                            //TODO set up empty view
+                            mMoviesAdapter.setNewData(it.data)
+//            mMoviesAdapter.setEmptyView(getAppActivityListener().inflateView(R.layout.include_empty_view, participantsRecycler))
+                            _vSwipeRefreshLayout.isRefreshing = false
+
+                            //TODO make logic to discover if all itens are loaded
 //            mMoviesAdapter.setEnableLoadMore(!complete)
-                        mMoviesAdapter.setEnableLoadMore(true)
-                    }
-                    SUCCESS_LOAD_MORE_DATA -> {
-                        _vSwipeRefreshLayout.setEnabled(false)
-                        if (!it.hasMorePages) {
-                            mMoviesAdapter.addData(it.newData!!)
-                            mMoviesAdapter.loadMoreEnd(true)
-                            _vSwipeRefreshLayout.setEnabled(true)
-                        } else {
-                            mMoviesAdapter.addData(it.newData!!)
-                            mMoviesAdapter.loadMoreComplete()
-                            _vSwipeRefreshLayout.setEnabled(true)
+                            mMoviesAdapter.setEnableLoadMore(true)
                         }
-                    }
-                    LOADING -> _vSwipeRefreshLayout.setEnabled(true)
-                    ERROR -> {
-                        _vSwipeRefreshLayout.setEnabled(false)
+                        SUCCESS_LOAD_MORE_DATA -> {
+                            _vSwipeRefreshLayout.isEnabled = false
+                            if (!it.hasMorePages) {
+                                mMoviesAdapter.addData(it.newData!!)
+                                mMoviesAdapter.loadMoreEnd(true)
+                                _vSwipeRefreshLayout.isEnabled = true
+                            } else {
+                                mMoviesAdapter.addData(it.newData!!)
+                                mMoviesAdapter.loadMoreComplete()
+                                _vSwipeRefreshLayout.isEnabled = true
+                            }
+                        }
+                        LOADING -> _vSwipeRefreshLayout.isEnabled = true
+                        ERROR -> {
+                            _vSwipeRefreshLayout.isEnabled = false
 //                        DialogUtil.SimpleDialog(this, 0, "Aviso", booleanResource.message)
+                        }
                     }
                 }
             }
         })
     }
 
+    private fun initAdapter() {
+        mMoviesAdapter.setOnLoadMoreListener(this, _vMoviesRecyclerRV)
+        mMoviesAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
+        mMoviesAdapter.setLoadMoreView(CustomLoadMoreView())
+        _vMoviesRecyclerRV.layoutManager = GridLayoutManager(context, calculateNoOfColumns())
+        _vMoviesRecyclerRV.adapter = mMoviesAdapter
+    }
+
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater?.inflate(R.menu.movies_search_menu, menu);
+        inflater?.inflate(R.menu.movies_search_menu, menu)
 
-        val item = menu?.findItem(R.id.search_movies)
+        val searchItem = menu?.findItem(R.id.search_movies)
 
-        mSearchView = item?.actionView as SearchView
+        mSearchView = searchItem?.actionView as SearchView
+
+        if (!mViewModel.search.isEmpty()) {
+            searchItem.expandActionView()
+            mSearchView.setQuery(mViewModel.search, false)
+            mSearchView.clearFocus()
+        }
+
         setUpSearch()
     }
 
@@ -136,26 +170,22 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                 .subscribe(object : Consumer<String> {
                     @Throws(Exception::class)
                     override fun accept(searchText: String) {
-                        mViewModel.getMovies(searchText,mMinDate, false);
+                        mViewModel.getMovies(searchText,mMinDate, false)
                     }
                 }))
     }
-
-    private fun initAdapter() {
-        mMoviesAdapter.setOnLoadMoreListener(this, _vMoviesRecyclerRV)
-        mMoviesAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
-        mMoviesAdapter.setLoadMoreView(CustomLoadMoreView())
-        _vMoviesRecyclerRV.layoutManager = GridLayoutManager(context, calculateNoOfColumns())
-        _vMoviesRecyclerRV.setAdapter(mMoviesAdapter)
-    }
-
     override fun onLoadMoreRequested() {
-        _vSwipeRefreshLayout.setEnabled(false)
-        mViewModel.getMovies(mViewModel.search,mMinDate, true);
+        _vSwipeRefreshLayout.isEnabled = false
+        mViewModel.getMovies(mViewModel.search,mMinDate, true)
     }
 
     override fun onRefresh() {
-        mViewModel.getMovies(mSearchView.query.toString(),mMinDate, false);
+        mViewModel.getMovies(mSearchView.query.toString(),mMinDate, false)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mViewModel.search = mSearchView.query.toString()
     }
 
     //TODO find solution to access view model in onDestroy
