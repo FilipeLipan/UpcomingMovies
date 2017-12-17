@@ -36,4 +36,8 @@ ext{
     okhttpVersion = '3.8.1'
     glideVersion = '4.3.1'
     circleImageViewVersion = '2.2.0'
+
+    arcLayoutVersion = '1.0.2'
+    kenburnsViewVersion = '1.0.7'
+
 }

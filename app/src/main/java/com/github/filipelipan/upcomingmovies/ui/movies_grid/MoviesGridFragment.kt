@@ -78,11 +78,8 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
             mShouldReload = true
         }
 
-        mMoviesAdapter.setOnItemClickListener(object: BaseQuickAdapter.OnItemClickListener {
-            override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                appActivityListener!!.replaceAndBackStackFragment(MovieDetailFragment.newInstance(adapter!!.getItem(position) as Movie))
-            }
-        })
+        mMoviesAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            appActivityListener!!.replaceAndBackStackFragment(MovieDetailFragment.newInstance(adapter!!.getItem(position) as Movie)) }
 
 
         mViewModel.mMovies.observe(this, Observer {

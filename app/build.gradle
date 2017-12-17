@@ -100,4 +100,8 @@ dependencies {
 
     //BaseRecyclerViewAdapterHelper
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'
+
+//    https://github.com/florent37/ArcLayout
+    implementation "com.github.florent37:arclayout:$arcLayoutVersion"
+    implementation "com.flaviofaria:kenburnsview:$kenburnsViewVersion"
 }
