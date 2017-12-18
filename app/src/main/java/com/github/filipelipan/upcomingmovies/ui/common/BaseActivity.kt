@@ -19,6 +19,4 @@ abstract class BaseActivity<out V: ViewModel> : AppCompatActivity() {
         setContentView(activityLayout)
     }
 
-
-
 }

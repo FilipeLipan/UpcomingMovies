@@ -27,6 +27,7 @@ import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import com.chad.library.adapter.base.listener.OnItemClickListener
+import com.github.filipelipan.upcomingmovies.ui.DetailActivity
 import com.github.filipelipan.upcomingmovies.ui.movie_detail.MovieDetailFragment
 
 /**
@@ -52,12 +53,13 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
     companion object {
         fun newInstance() = MoviesGridFragment()
         val RELEASE_DATE_FORMAT = "yyyy-MM-dd"
+        val fragmentStaticTag = MoviesGridFragment::class.java.simpleName
     }
 
     override val mViewModel: MoviesGridViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(MoviesGridViewModel::class.java)
     override val fragmentTag: String
-        get() = MoviesGridFragment::class.java.simpleName
+        get() = fragmentStaticTag
     override val fragmentName: String
         get() = getString(R.string.movies_grid_title)
     override val fragmentLayout: Int
@@ -79,7 +81,8 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
         }
 
         mMoviesAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            appActivityListener!!.replaceAndBackStackFragment(MovieDetailFragment.newInstance(adapter!!.getItem(position) as Movie)) }
+            context!!.startActivity(DetailActivity.getIntent(context!!,adapter!!.getItem(position) as Movie))}
+//            appActivityListener!!.replaceAndBackStackFragment(MovieDetailFragment.newInstance(adapter!!.getItem(position) as Movie)) }
 
 
         mViewModel.mMovies.observe(this, Observer {

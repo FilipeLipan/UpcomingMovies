@@ -1,5 +1,6 @@
 package com.github.filipelipan.upcomingmovies.di
 
+import com.github.filipelipan.upcomingmovies.ui.DetailActivity
 import com.github.filipelipan.upcomingmovies.ui.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -9,4 +10,8 @@ abstract class ActivityBindsModule {
 
     @ContributesAndroidInjector(modules = arrayOf(FragmentBuildersModule::class))
     abstract fun contributeMainActivity(): MainActivity
+
+
+    @ContributesAndroidInjector(modules = arrayOf(FragmentBuildersModule::class))
+    abstract fun contributeDetailActivity(): DetailActivity
 }

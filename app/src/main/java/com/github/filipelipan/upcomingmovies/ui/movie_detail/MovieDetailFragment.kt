@@ -9,6 +9,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.github.filipelipan.upcomingmovies.BuildConfig
 import com.github.filipelipan.upcomingmovies.R
 import com.github.filipelipan.upcomingmovies.model.Movie
+import com.github.filipelipan.upcomingmovies.ui.MOVIE_KEY
 import com.github.filipelipan.upcomingmovies.ui.common.BaseFragment
 import com.github.filipelipan.upcomingmovies.ui.movies_grid.MoviesGridFragment
 import kotlinx.android.synthetic.main.a_include_movie_detail.*
@@ -22,10 +23,10 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
     private lateinit var mMovie: Movie;
 
     companion object {
-        private val MOVIE_KEY = "movie_key"
+        val fragmentStaticTag = MovieDetailFragment::class.java.simpleName
 
         fun newInstance(movie: Movie) = MovieDetailFragment().apply {
-            arguments = Bundle().apply { putParcelable(MOVIE_KEY, movie) }
+            arguments = Bundle().apply { putSerializable(MOVIE_KEY, movie) }
         }
         val RELEASE_DATE_FORMAT = "yyyy-MM-dd";
     }
@@ -33,7 +34,7 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
     override val mViewModel: MovieDetailViewModel
         get() = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailViewModel::class.java)
     override val fragmentTag: String
-        get() = MovieDetailFragment::class.java.simpleName
+        get() = fragmentStaticTag
     override val fragmentName: String
         get() = getString(R.string.movie_detail)
     override val fragmentLayout: Int
@@ -43,7 +44,7 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments != null && arguments!!.containsKey(MOVIE_KEY)) {
-            mMovie = arguments!!.getParcelable(MOVIE_KEY)
+            mMovie = arguments!!.getSerializable(MOVIE_KEY) as Movie
 
             _vMovieTitleTV.text = mMovie.originalTitle
 
@@ -53,6 +54,7 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
             _vOverViewTV.text = mMovie.overview
 
+            //TODO make into extensions add placeholder
             Glide.with(context)
                     .load(BuildConfig.BASE_POSTER_URL_HD + mMovie.posterPath)
                     .transition(DrawableTransitionOptions.withCrossFade())

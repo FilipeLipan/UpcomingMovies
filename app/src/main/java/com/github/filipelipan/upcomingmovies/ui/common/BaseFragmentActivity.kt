@@ -25,7 +25,6 @@ abstract class BaseFragmentActivity<V : ViewModel> : AppCompatActivity(), IBaseF
     abstract val activityLayout: Int
     abstract val container: FrameLayout
     abstract val toolbar : Toolbar
-    abstract val initialFragment : BaseFragment<*>
 
     private val fragmentTransaction: FragmentTransaction
         get() = supportFragmentManager.beginTransaction()
@@ -34,14 +33,6 @@ abstract class BaseFragmentActivity<V : ViewModel> : AppCompatActivity(), IBaseF
         super.onCreate(savedInstanceState)
         setContentView(activityLayout)
         setSupportActionBar(toolbar)
-
-        if(savedInstanceState == null){
-            if(supportFragmentManager.findFragmentByTag(initialFragment.fragmentTag) != null){
-                replaceFragment(supportFragmentManager.findFragmentByTag(initialFragment.fragmentTag))
-            }else{
-                addFragment(initialFragment)
-            }
-        }
     }
 
     override fun setTitle(title: String) {

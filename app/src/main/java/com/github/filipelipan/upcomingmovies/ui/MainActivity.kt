@@ -2,6 +2,7 @@ package com.github.filipelipan.upcomingmovies.ui
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.FrameLayout
 import com.github.filipelipan.upcomingmovies.R
@@ -23,8 +24,19 @@ class MainActivity : BaseFragmentActivity<ViewModel>() {
         get() = _vContainer
     override val toolbar: Toolbar
         get() = _vToolbar
-    override val initialFragment: BaseFragment<*>
-        get() = MoviesGridFragment.newInstance()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if(savedInstanceState == null){
+            if(supportFragmentManager.findFragmentByTag(MoviesGridFragment.fragmentStaticTag) != null){
+                replaceFragment(supportFragmentManager.findFragmentByTag(MoviesGridFragment.fragmentStaticTag))
+            }else{
+                addFragment(MoviesGridFragment.newInstance())
+            }
+        }
+    }
+
 
 
 }

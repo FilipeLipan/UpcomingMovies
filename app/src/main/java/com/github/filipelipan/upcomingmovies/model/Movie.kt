@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
 /**
  * Created by lispa on 13/12/2017.
  */
-@SuppressLint("ParcelCreator")
-@Parcelize
-open class Movie : Parcelable {
+
+open class Movie : Serializable {
     open var id: Int = 0
     @SerializedName("original_title")
     open var originalTitle: String = ""
