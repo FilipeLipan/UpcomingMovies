@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.os.PersistableBundle
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.widget.FrameLayout
 import com.github.filipelipan.upcomingmovies.R
 import com.github.filipelipan.upcomingmovies.model.Movie
@@ -50,6 +51,19 @@ class DetailActivity : BaseFragmentActivity<ViewModel>() {
             }else{
                 addFragment(MovieDetailFragment.newInstance(intent.getSerializableExtra(MOVIE_KEY) as Movie))
             }
+        }
+
+
+        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true);
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.getItemId()) {
+            android.R.id.home -> {
+                this.onBackPressed()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 }

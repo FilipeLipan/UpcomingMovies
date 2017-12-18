@@ -43,6 +43,8 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        appActivityListener!!.setTitle(getString(R.string.movie_detail_title))
+
         if (arguments != null && arguments!!.containsKey(MOVIE_KEY)) {
             mMovie = arguments!!.getSerializable(MOVIE_KEY) as Movie
 

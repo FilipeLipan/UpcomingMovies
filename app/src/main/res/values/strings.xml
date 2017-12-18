@@ -11,4 +11,5 @@
     <string name="genres">Genres</string>
     <string name="release_date">Release date</string>
     <string name="rating">Rating</string>
+    <string name="movie_detail_title"></string>
 </resources>
