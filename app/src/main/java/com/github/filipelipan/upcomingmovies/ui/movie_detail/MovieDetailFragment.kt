@@ -12,6 +12,7 @@ import com.github.filipelipan.upcomingmovies.model.Movie
 import com.github.filipelipan.upcomingmovies.ui.MOVIE_KEY
 import com.github.filipelipan.upcomingmovies.ui.common.BaseFragment
 import com.github.filipelipan.upcomingmovies.ui.movies_grid.MoviesGridFragment
+import com.github.filipelipan.upcomingmovies.util.extensions.loadImageFromURI
 import kotlinx.android.synthetic.main.a_include_movie_detail.*
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
 
@@ -56,11 +57,7 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
             _vOverViewTV.text = mMovie.overview
 
-            //TODO make into extensions add placeholder
-            Glide.with(context)
-                    .load(BuildConfig.BASE_POSTER_URL_HD + mMovie.posterPath)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(_vPosterKBV)
+            _vPosterKBV.loadImageFromURI(context!!, BuildConfig.BASE_POSTER_URL + mMovie.posterPath )
         }
     }
 }

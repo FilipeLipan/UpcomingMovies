@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.github.filipelipan.upcomingmovies.BuildConfig
 import com.github.filipelipan.upcomingmovies.R
 import com.github.filipelipan.upcomingmovies.model.Movie
+import com.github.filipelipan.upcomingmovies.util.extensions.loadImageFromURI
 
 /**
  * Created by lispa on 16/12/2017.
@@ -20,13 +21,9 @@ class MoviesAdapter (mContext: Context?, mMoviesList: List<Movie>) :
 
     override fun convert(viewHolder: BaseViewHolder, item: Movie) {
 
-        //TODO insert placeholder
-
         mContext?.let {
-            Glide.with(mContext)
-                    .load(BuildConfig.BASE_POSTER_URL + item.posterPath)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(viewHolder.getView(R.id._vMovieGridItemIV))
+            viewHolder.getView<ImageView>(R.id._vMovieGridItemIV)
+                    .loadImageFromURI(mContext, BuildConfig.BASE_POSTER_URL + item.posterPath )
         }
     }
 
