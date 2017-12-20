@@ -30,4 +30,17 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowDx">1</item>
     </style>
+
+    <style name="BoldTitle">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">#3A3A3A</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DetailText">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/grey_text</item>
+        <item name="android:textSize">15sp</item>
+    </style>
 </resources>

@@ -40,5 +40,6 @@
 
     <dimen name="grid_list_item_height">230dp</dimen>
     <dimen name="empty_grid_icon">100dp</dimen>
+    <dimen name="material_padding">16dp</dimen>
 
 </resources>
