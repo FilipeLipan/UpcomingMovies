@@ -19,7 +19,7 @@ class PagedResource<T> private constructor(val status: Status, val data: T?, val
             return PagedResource(Status.SUCCESS_LOAD_MORE_DATA, oldData, newData, null, hasMorePages)
         }
 
-        //TODO remove data from error function
+        //TODO -- improve -- remove data from error function
         fun <T> error(msg: String, data: T): PagedResource<T> {
             return PagedResource(Status.ERROR, data, null, msg, false)
         }

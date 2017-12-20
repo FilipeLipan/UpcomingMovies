@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fafafa"
     android:orientation="vertical">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
@@ -15,20 +14,22 @@
 
         <com.github.florent37.arclayout.ArcLayout
             android:id="@+id/diagonalLayout"
-            android:layout_width="match_parent"
-            android:layout_height="370dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:elevation="10dp"
+            android:minHeight="300dp"
             app:arc_cropDirection="cropOutside"
             app:arc_height="50dp"
-            app:arc_position="bottom">
+            app:arc_position="right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/middleGuideline"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.flaviofaria.kenburnsview.KenBurnsView
+                android:id="@+id/_vPosterKBV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/_vPosterKBV"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background" />
 
@@ -42,13 +43,13 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/_vMovieTitleTV"
+                    style="@style/BoldTextViewWithShadow"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/_vMovieTitleTV"
                     android:layout_gravity="center_horizontal|bottom"
                     android:layout_marginBottom="50dp"
-                    android:adjustViewBounds="true"
-                    style="@style/BoldTextViewWithShadow" />
+                    android:adjustViewBounds="true" />
 
             </FrameLayout>
 
@@ -57,21 +58,30 @@
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="310dp"
+            android:layout_marginTop="20dp"
             android:src="@drawable/ic_share"
             app:backgroundTint="@color/colorAccent"
             app:elevation="15dp"
-            app:fabSize="normal" />
+            app:fabSize="normal"
+            app:layout_constraintRight_toRightOf="@id/middleGuideline"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             layout="@layout/a_include_movie_detail"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/diagonalLayout"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="@id/middleGuideline"
+            app:layout_constraintRight_toRightOf="parent" />
 
-    </RelativeLayout>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/middleGuideline"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.45" />
+    </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

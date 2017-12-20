@@ -52,13 +52,13 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
             _vReleaseDateTV.text = mMovie.releaseDate
 
-            //TODO improve vote Average layout and remove string /10
+            //TODO -- improve -- improve vote Average layout and remove string /10
             _vRateTV.text = mMovie.voteAverage.toString() + "/10"
 
             _vOverViewTV.text = mMovie.overview
 
-            //TODO fix gender no showing up
-            //TODO handle empty textviews
+            //TODO -- improve -- fix gender no showing up
+            //TODO -- improve -- handle empty textviews
             _vPosterKBV.loadImageFromURI(context!!, BuildConfig.BASE_POSTER_URL_HD + mMovie.posterPath )
         }
     }
