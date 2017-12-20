@@ -192,14 +192,8 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel.search = mSearchView.query.toString()
+        compositeDisposable.clear()
+        mViewModel.detachView()
     }
 
-    //TODO find solution to access view model in onDestroy
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        compositeDisposable.clear()
-//
-//        //TODO refactor this
-//        mViewModel.detachView()
-//    }
 }
