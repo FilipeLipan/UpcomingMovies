@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.github.filipelipan.upcomingmovies.BuildConfig
 import com.github.filipelipan.upcomingmovies.R
 import com.github.filipelipan.upcomingmovies.model.Movie
+import com.github.filipelipan.upcomingmovies.util.extensions.loadAndCenterCropImageFromURI
 import com.github.filipelipan.upcomingmovies.util.extensions.loadImageFromURI
 
 /**
@@ -21,7 +22,7 @@ class MoviesAdapter (mContext: Context?, mMoviesList: List<Movie>) :
 
         mContext?.let {
             viewHolder.getView<ImageView>(R.id._vMovieGridItemIV)
-                    .loadImageFromURI(mContext, BuildConfig.BASE_POSTER_URL + item.posterPath )
+                    .loadAndCenterCropImageFromURI(mContext, BuildConfig.BASE_POSTER_URL + item.posterPath )
         }
     }
 

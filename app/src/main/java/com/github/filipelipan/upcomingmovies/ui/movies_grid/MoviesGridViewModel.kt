@@ -31,10 +31,10 @@ class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : Vi
             nextPage += 1
         }else{
             nextPage = 1
-            if(mMovies.value!!.data == null) {
-                mMovies.value = PagedResource.loading(ArrayList<Movie>())
-            }else{
+            if(mMovies.value != null && mMovies.value!!.data != null) {
                 mMovies.value = PagedResource.loading(mMovies.value!!.data)
+            }else{
+                mMovies.value = PagedResource.loading(ArrayList<Movie>())
             }
         }
 
