@@ -29,7 +29,6 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
         fun newInstance(movie: Movie) = MovieDetailFragment().apply {
             arguments = Bundle().apply { putSerializable(MOVIE_KEY, movie) }
         }
-        val RELEASE_DATE_FORMAT = "yyyy-MM-dd";
     }
 
     override val mViewModel: MovieDetailViewModel
@@ -53,11 +52,14 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
             _vReleaseDateTV.text = mMovie.releaseDate
 
+            //TODO improve vote Average layout and remove string /10
             _vRateTV.text = mMovie.voteAverage.toString() + "/10"
 
             _vOverViewTV.text = mMovie.overview
 
-            _vPosterKBV.loadImageFromURI(context!!, BuildConfig.BASE_POSTER_URL + mMovie.posterPath )
+            //TODO fix gender no showing up
+            //TODO handle empty textviews
+            _vPosterKBV.loadImageFromURI(context!!, BuildConfig.BASE_POSTER_URL_HD + mMovie.posterPath )
         }
     }
 }

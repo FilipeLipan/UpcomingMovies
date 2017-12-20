@@ -31,6 +31,11 @@ class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : Vi
             nextPage += 1
         }else{
             nextPage = 1
+            if(mMovies.value!!.data == null) {
+                mMovies.value = PagedResource.loading(ArrayList<Movie>())
+            }else{
+                mMovies.value = PagedResource.loading(mMovies.value!!.data)
+            }
         }
 
         search = searchQuery
@@ -51,11 +56,13 @@ class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : Vi
     fun movieSubscriber(isLoadMore: Boolean) : DisposableObserver<PagedResponse<Movie>> {
         return object : DisposableObserver<PagedResponse<Movie>>() {
             override fun onError(e: Throwable) {
-                //TODO handle error
+                //TODO handle error'
                 Log.d("", "")
+                mMovies.value = PagedResource.loading(mMovies.value!!.data)
             }
 
-            override fun onComplete() {}
+            override fun onComplete() {
+            }
 
             override fun onNext(movies: PagedResponse<Movie>) {
                 if(isLoadMore){

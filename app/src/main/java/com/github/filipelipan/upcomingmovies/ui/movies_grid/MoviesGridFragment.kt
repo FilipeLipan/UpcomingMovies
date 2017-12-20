@@ -144,6 +144,7 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
 
         val searchItem = menu?.findItem(R.id.search_movies)
 
+        // find and fix searhview bugs
         mSearchView = searchItem?.actionView as SearchView
 
         if (!mViewModel.search.isEmpty()) {
