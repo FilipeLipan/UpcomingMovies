@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.github.filipelipan.upcomingmovies.ui.DetailActivity
 import com.github.filipelipan.upcomingmovies.ui.movie_detail.MovieDetailFragment
+import com.github.filipelipan.upcomingmovies.util.extensions.inflateView
 
 /**
  * Created by lispa on 16/12/2017.
@@ -96,9 +97,10 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                     when (it.status) {
                         SUCCESS -> {
                             mMoviesAdapter.setEnableLoadMore(false)
-                            //TODO set up empty view
                             mMoviesAdapter.setNewData(it.data)
-//            mMoviesAdapter.setEmptyView(getAppActivityListener().inflateView(R.layout.include_empty_view, participantsRecycler))
+                            activity?.let {
+                                mMoviesAdapter.setEmptyView(activity!!.inflateView(R.layout.include_empty_view,_vMoviesRecyclerRV))
+                            }
                             _vSwipeRefreshLayout.isRefreshing = false
                             mMoviesAdapter.setEnableLoadMore(true)
                         }
@@ -117,7 +119,10 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                         LOADING -> _vSwipeRefreshLayout.isEnabled = true
                         ERROR -> {
                             _vSwipeRefreshLayout.isEnabled = false
-//                        DialogUtil.SimpleDialog(this, 0, "Aviso", booleanResource.message)
+                            //TODO add reload button to empty error view
+                            activity?.let {
+                                mMoviesAdapter.setEmptyView(activity!!.inflateView(R.layout.include_error_view,_vMoviesRecyclerRV))
+                            }
                         }
                     }
                 }
@@ -131,6 +136,9 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
         mMoviesAdapter.setLoadMoreView(CustomLoadMoreView())
         _vMoviesRecyclerRV.layoutManager = GridLayoutManager(context, calculateNoOfColumns())
         _vMoviesRecyclerRV.adapter = mMoviesAdapter
+        activity?.let {
+            mMoviesAdapter.setEmptyView(activity!!.inflateView(R.layout.include_empty_view,_vMoviesRecyclerRV))
+        }
     }
 
 
