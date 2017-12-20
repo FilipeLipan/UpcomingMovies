@@ -100,9 +100,6 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                             mMoviesAdapter.setNewData(it.data)
 //            mMoviesAdapter.setEmptyView(getAppActivityListener().inflateView(R.layout.include_empty_view, participantsRecycler))
                             _vSwipeRefreshLayout.isRefreshing = false
-
-                            //TODO make logic to discover if all itens are loaded
-//            mMoviesAdapter.setEnableLoadMore(!complete)
                             mMoviesAdapter.setEnableLoadMore(true)
                         }
                         SUCCESS_LOAD_MORE_DATA -> {
