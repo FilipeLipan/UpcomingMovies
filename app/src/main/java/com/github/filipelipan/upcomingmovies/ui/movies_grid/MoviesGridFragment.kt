@@ -96,6 +96,7 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                 if (it != null) {
                     when (it.status) {
                         SUCCESS -> {
+                            showLoading(false)
                             mMoviesAdapter.setEnableLoadMore(false)
                             mMoviesAdapter.setNewData(it.data)
                             activity?.let {
@@ -105,7 +106,8 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                             mMoviesAdapter.setEnableLoadMore(true)
                         }
                         SUCCESS_LOAD_MORE_DATA -> {
-                            _vSwipeRefreshLayout.isEnabled = false
+                            showLoading(false)
+
                             if (!it.hasMorePages) {
                                 mMoviesAdapter.addData(it.newData!!)
                                 mMoviesAdapter.loadMoreEnd(true)
@@ -116,9 +118,11 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                                 _vSwipeRefreshLayout.isEnabled = true
                             }
                         }
-                        LOADING -> _vSwipeRefreshLayout.isEnabled = true
+                        LOADING -> {
+                            showLoading(true)
+                        }
                         ERROR -> {
-                            _vSwipeRefreshLayout.isEnabled = false
+                            showLoading(false)
 
                             //TODO -- improve -- add retry button to empty error view
                             activity?.let {
@@ -129,6 +133,16 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                 }
             }
         })
+    }
+
+    private fun showLoading(showLoading: Boolean){
+        if(showLoading){
+            _vSwipeRefreshLayout.isEnabled = true
+            _vSwipeRefreshLayout.isRefreshing = false
+        }else{
+            _vSwipeRefreshLayout.isEnabled = true
+            _vSwipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun initAdapter() {
