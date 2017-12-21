@@ -1,14 +1,20 @@
 package com.github.filipelipan.upcomingmovies.ui.movies_grid
 
+import android.app.ActivityOptions
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.SearchView
+import android.transition.Explode
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.github.filipelipan.upcomingmovies.R
@@ -30,6 +36,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.github.filipelipan.upcomingmovies.ui.DetailActivity
 import com.github.filipelipan.upcomingmovies.ui.movie_detail.MovieDetailFragment
 import com.github.filipelipan.upcomingmovies.util.extensions.inflateView
+import kotlinx.android.synthetic.main.list_item.*
 
 /**
  * Created by lispa on 16/12/2017.
@@ -75,16 +82,15 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
 
         _vSwipeRefreshLayout.setOnRefreshListener(this)
 
-        if(savedInstanceState == null) {
-            mViewModel.getMovies(mViewModel.search,mMinDate, false)
-        }else{
+        if (savedInstanceState == null) {
+            mViewModel.getMovies(mViewModel.search, mMinDate, false)
+        } else {
             mShouldReload = true
         }
 
         mMoviesAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            context!!.startActivity(DetailActivity.getIntent(context!!,adapter!!.getItem(position) as Movie))}
-//            appActivityListener!!.replaceAndBackStackFragment(MovieDetailFragment.newInstance(adapter!!.getItem(position) as Movie)) }
-
+            context!!.startActivity(DetailActivity.getIntent(context!!, adapter!!.getItem(position) as Movie))
+        }
 
         mViewModel.mMovies.observe(this, Observer {
 
@@ -137,8 +143,8 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
 
     private fun showLoading(showLoading: Boolean){
         if(showLoading){
-            _vSwipeRefreshLayout.isEnabled = true
-            _vSwipeRefreshLayout.isRefreshing = false
+            _vSwipeRefreshLayout.isEnabled = false
+            _vSwipeRefreshLayout.isRefreshing = true
         }else{
             _vSwipeRefreshLayout.isEnabled = true
             _vSwipeRefreshLayout.isRefreshing = false
@@ -167,6 +173,7 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
         // find and fix searhview bugs
         mSearchView = searchItem?.actionView as SearchView
 
+
         if (!mViewModel.search.isEmpty()) {
             searchItem.expandActionView()
             mSearchView.setQuery(mViewModel.search, false)
@@ -174,11 +181,23 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
         }
 
         setUpSearch()
+
+        searchItem.setOnActionExpandListener(object: MenuItem.OnActionExpandListener{
+            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                mViewModel.search = ""
+                mViewModel.getMovies(mViewModel.search, mMinDate, false)
+               return true
+            }
+        })
     }
 
     private fun setUpSearch(){
         compositeDisposable.add(RxSearchObservable.fromView(mSearchView)
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(500, TimeUnit.MILLISECONDS)
                 .filter(object : Predicate<String> {
                     @Throws(Exception::class)
                     override fun test(searchText: String): Boolean {
