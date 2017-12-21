@@ -49,6 +49,10 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
         appActivityListener!!.setTitle(getString(R.string.movie_detail_title))
 
+        if(savedInstanceState == null){
+            mViewModel.getGenres()
+        }
+
         if (arguments != null && arguments!!.containsKey(MOVIE_KEY)) {
             mMovie = arguments!!.getSerializable(MOVIE_KEY) as Movie
 
@@ -71,12 +75,23 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
             when (it!!.status) {
                 Status.SUCCESS -> {
-
+                    // transform genreIds into Strings, Strings are coming from Genre Cache repository
+                    val genreMap = it.data
+                    var genres = ""
+                    mMovie.genreIds.forEach {
+                         genres += " " + genreMap?.get(it)
+                    }
+                    if(genres.isEmpty()){
+                        genres = (getString(R.string.genre_not_available))
+                    }
+                    _vGenresTV.text = genres
                 }
-                Status.LOADING -> {
-                }
+                Status.LOADING -> { }
                 Status.ERROR -> {
-                    _vGenresTV.text = ("Not available")
+                    _vGenresTV.text = (getString(R.string.genre_not_available))
+                }
+                else -> {
+                    _vGenresTV.text = (getString(R.string.genre_not_available))
                 }
             }
         })

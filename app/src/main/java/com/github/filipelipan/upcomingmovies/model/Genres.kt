@@ -5,4 +5,8 @@ package com.github.filipelipan.upcomingmovies.model
  */
 open class Genres {
     open var genres: ArrayList<Genre> = ArrayList()
+
+    fun toMap() : Map<Int, String> {
+        return genres.map { it.id to it.name }.toMap()
+    }
 }

@@ -16,4 +16,5 @@
     <string name="loading_failed">Loading failed</string>
     <string name="err_connection_error">Impossible to connect, check your connection</string>
     <string name="err_unauthorized">Unauthorized</string>
+    <string name="genre_not_available">Not available</string>
 </resources>

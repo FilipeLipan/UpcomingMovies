@@ -21,4 +21,6 @@ open class Movie : Serializable {
     open var voteAverage: Double = 0.toDouble()
     @SerializedName("release_date")
     open var releaseDate: String = ""
+    @SerializedName("genre_ids")
+    open var genreIds: ArrayList<Int> = ArrayList()
 }
