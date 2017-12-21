@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--TODO create landscape lauyout-->
     <include layout="@layout/include_container"/>
 
     <include layout="@layout/include_invisible_toolbar" />

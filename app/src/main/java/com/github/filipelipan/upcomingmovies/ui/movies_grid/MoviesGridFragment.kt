@@ -119,7 +119,8 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
                         LOADING -> _vSwipeRefreshLayout.isEnabled = true
                         ERROR -> {
                             _vSwipeRefreshLayout.isEnabled = false
-                            //TODO -- improve -- add reload button to empty error view
+
+                            //TODO -- improve -- add retry button to empty error view
                             activity?.let {
                                 mMoviesAdapter.setEmptyView(activity!!.inflateView(R.layout.include_error_view,_vMoviesRecyclerRV))
                             }

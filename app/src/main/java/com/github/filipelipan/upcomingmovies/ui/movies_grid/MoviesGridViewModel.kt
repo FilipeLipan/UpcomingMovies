@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.github.filipelipan.upcomingmovies.data.api.IRestApiService
+import com.github.filipelipan.upcomingmovies.error.IErrorHandlerHelper
 import com.github.filipelipan.upcomingmovies.livedata_resources.PagedResource
 import com.github.filipelipan.upcomingmovies.model.Movie
 import com.github.filipelipan.upcomingmovies.model.PagedResponse
@@ -56,9 +57,14 @@ class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : Vi
     fun movieSubscriber(isLoadMore: Boolean) : DisposableObserver<PagedResponse<Movie>> {
         return object : DisposableObserver<PagedResponse<Movie>>() {
             override fun onError(e: Throwable) {
-                //TODO handle error'
-                Log.d("", "")
-                mMovies.value = PagedResource.loading(mMovies.value!!.data)
+                IErrorHandlerHelper.defaultErrorResolver(e);
+
+                //TODO --improved-- make
+                if(mMovies.value != null && mMovies.value!!.data != null) {
+                    mMovies.value = PagedResource.error(e.message!!, mMovies.value!!.data!!)
+                }else{
+                    mMovies.value = PagedResource.error(e.message!!, ArrayList<Movie>())
+                }
             }
 
             override fun onComplete() {

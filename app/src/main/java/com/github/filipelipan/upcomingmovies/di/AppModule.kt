@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,7 +23,7 @@ class AppModule {
     @Provides
     fun provideApp(): App = App.instance!!
 
-    @Singleton
+    @Reusable
     @Provides
     internal fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -34,7 +35,7 @@ class AppModule {
                 .build()
     }
 
-    @Singleton
+    @Reusable
     @Provides
     internal fun provideGson(): Gson {
         return GsonBuilder()
@@ -42,13 +43,13 @@ class AppModule {
                .create()
     }
 
-    @Singleton
+    @Reusable
     @Provides
     internal fun provideIRestApiService(retrofit: Retrofit): IRestApiService {
         return retrofit.create(IRestApiService::class.java)
     }
 
-    @Singleton
+    @Reusable
     @Provides
     internal fun provideOkHttpClient(interceptor: Interceptor,
                                      loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
@@ -67,7 +68,7 @@ class AppModule {
         }
     }
 
-    @Singleton
+    @Reusable
     @Provides
     internal fun providerLogginInterceptor(): HttpLoggingInterceptor {
         val loggingInterceptor = HttpLoggingInterceptor()
@@ -75,7 +76,7 @@ class AppModule {
         return loggingInterceptor
     }
 
-    @Singleton
+    @Reusable
     @Provides
     internal fun providerApiKeyInterceptor(): Interceptor {
         return Interceptor { chain ->

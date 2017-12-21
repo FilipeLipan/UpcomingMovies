@@ -6,11 +6,18 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.FrameLayout
 import com.github.filipelipan.upcomingmovies.R
-import com.github.filipelipan.upcomingmovies.ui.common.BaseFragment
+import com.github.filipelipan.upcomingmovies.error.ErrorEvents
+import com.github.filipelipan.upcomingmovies.error.RxErrorEventBus
 import com.github.filipelipan.upcomingmovies.ui.common.BaseFragmentActivity
 import com.github.filipelipan.upcomingmovies.ui.movies_grid.MoviesGridFragment
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.include_container.*
 import kotlinx.android.synthetic.main.include_toolbar.*
+import com.github.filipelipan.upcomingmovies.error.RxHttpError
+import com.github.filipelipan.upcomingmovies.util.extensions.toast
+import java.net.HttpURLConnection
+
 
 class MainActivity : BaseFragmentActivity<ViewModel>() {
 
@@ -25,6 +32,8 @@ class MainActivity : BaseFragmentActivity<ViewModel>() {
     override val toolbar: Toolbar
         get() = _vToolbar
 
+    private val disposables = CompositeDisposable()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,8 +44,34 @@ class MainActivity : BaseFragmentActivity<ViewModel>() {
                 addFragment(MoviesGridFragment.newInstance())
             }
         }
+
+        disposables.add(RxErrorEventBus.toObservable(ErrorEvents.HttpError::class.java)
+                .subscribe { t ->
+                    val error = t.error
+                    when (error.errorCode) {
+                        RxHttpError.SOCKETTIMEOUT_CODE, RxHttpError.UNKNOWNHOST_CODE, RxHttpError.NO_CONNECTIVITY_CODE -> {
+                            toast(getString(R.string.err_connection_error))
+                        }
+                        HttpURLConnection.HTTP_FORBIDDEN, HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                            toast(getString(R.string.err_unauthorized))
+                        }
+                        else ->
+                            if(error.detail != null){
+                                toast(error.detail!!)
+                            }
+                    }
+                })
+
+        disposables.add(RxErrorEventBus.toObservable(ErrorEvents.ThrowableError::class.java)
+                .subscribe { t ->
+                    var error = t.error
+                    error.printStackTrace()
+                    toast(error.message!!)
+                })
     }
 
-
-
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
+    }
 }

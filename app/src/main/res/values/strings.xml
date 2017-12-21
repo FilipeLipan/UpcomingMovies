@@ -14,4 +14,6 @@
     <string name="movie_detail_title"></string>
     <string name="empty_list">No Results</string>
     <string name="loading_failed">Loading failed</string>
+    <string name="err_connection_error">Impossible to connect, check your connection</string>
+    <string name="err_unauthorized">Unauthorized</string>
 </resources>
