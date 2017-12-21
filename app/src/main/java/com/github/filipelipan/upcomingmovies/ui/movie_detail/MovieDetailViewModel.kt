@@ -52,10 +52,6 @@ class MovieDetailViewModel @Inject constructor(val genreRepository: GenreReposit
                 }))
     }
 
-    fun addDisposable(disposable: Disposable) {
-        disposables.add(disposable)
-    }
-
     fun detachView() {
         disposables.clear()
     }

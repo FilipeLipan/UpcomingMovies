@@ -96,4 +96,9 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
             }
         })
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mViewModel.detachView()
+    }
 }
