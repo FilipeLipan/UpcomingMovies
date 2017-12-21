@@ -1,5 +1,6 @@
 package com.github.filipelipan.upcomingmovies.data.api
 
+import com.github.filipelipan.upcomingmovies.model.Genres
 import com.github.filipelipan.upcomingmovies.model.Movie
 import com.github.filipelipan.upcomingmovies.model.PagedResponse
 import io.reactivex.Observable
@@ -30,4 +31,7 @@ public interface IRestApiService {
                      @Query("query") query: String,
                      @Query("language") language: String,
                      @Query("primary_release_date.gte") minReleaseDate: String) : Observable<PagedResponse<Movie>>
+
+    @GET("genre/movie/list")
+    fun getGenres(@Query("language") language: String): Observable<Genres>
 }

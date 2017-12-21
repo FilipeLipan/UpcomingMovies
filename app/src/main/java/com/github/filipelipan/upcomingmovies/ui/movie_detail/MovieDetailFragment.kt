@@ -1,5 +1,6 @@
 package com.github.filipelipan.upcomingmovies.ui.movie_detail
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.graphics.drawable.VectorDrawableCompat
@@ -8,13 +9,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.github.filipelipan.upcomingmovies.BuildConfig
 import com.github.filipelipan.upcomingmovies.R
+import com.github.filipelipan.upcomingmovies.livedata_resources.Status
 import com.github.filipelipan.upcomingmovies.model.Movie
 import com.github.filipelipan.upcomingmovies.ui.MOVIE_KEY
 import com.github.filipelipan.upcomingmovies.ui.common.BaseFragment
 import com.github.filipelipan.upcomingmovies.ui.movies_grid.MoviesGridFragment
+import com.github.filipelipan.upcomingmovies.util.extensions.inflateView
 import com.github.filipelipan.upcomingmovies.util.extensions.loadImageFromURI
 import kotlinx.android.synthetic.main.a_include_movie_detail.*
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
+import kotlinx.android.synthetic.main.fragment_movies_grid.*
 
 /**
  * Created by lispa on 17/12/2017.
@@ -59,7 +63,22 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
             //TODO -- improve -- fix gender no showing up
             //TODO -- improve -- handle empty textviews
-            _vPosterKBV.loadImageFromURI(context!!, BuildConfig.BASE_POSTER_URL_HD + mMovie.posterPath )
+            _vPosterKBV.loadImageFromURI(context!!, BuildConfig.BASE_POSTER_URL_HD + mMovie.posterPath)
         }
+
+
+        mViewModel.mGenres.observe(this, Observer {
+
+            when (it!!.status) {
+                Status.SUCCESS -> {
+
+                }
+                Status.LOADING -> {
+                }
+                Status.ERROR -> {
+                    _vGenresTV.text = ("Not available")
+                }
+            }
+        })
     }
 }

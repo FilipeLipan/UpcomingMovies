@@ -104,4 +104,11 @@ dependencies {
 //    https://github.com/florent37/ArcLayout
     implementation "com.github.florent37:arclayout:$arcLayoutVersion"
     implementation "com.flaviofaria:kenburnsview:$kenburnsViewVersion"
+
+    // Rx
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation "com.github.VictorAlbertos.RxCache:runtime:$rootProject.rxCacheVersion"
+    kapt "com.github.VictorAlbertos.RxCache:compiler:$rootProject.rxCacheVersion"
+    implementation "com.github.VictorAlbertos.Jolyglot:gson:$rootProject.rxCacheGsonVersion"
 }

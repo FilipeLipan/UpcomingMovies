@@ -40,4 +40,6 @@ ext{
     arcLayoutVersion = '1.0.2'
     kenburnsViewVersion = '1.0.7'
 
+    rxCacheVersion = '1.8.1-2.x'
+    rxCacheGsonVersion = '0.0.3'
 }

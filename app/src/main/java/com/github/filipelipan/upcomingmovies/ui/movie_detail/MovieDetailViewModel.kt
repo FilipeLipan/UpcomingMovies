@@ -4,7 +4,11 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.github.filipelipan.upcomingmovies.data.api.IRestApiService
+import com.github.filipelipan.upcomingmovies.data.cache.GenreRepository
+import com.github.filipelipan.upcomingmovies.error.IErrorHandlerHelper
 import com.github.filipelipan.upcomingmovies.livedata_resources.PagedResource
+import com.github.filipelipan.upcomingmovies.livedata_resources.Resource
+import com.github.filipelipan.upcomingmovies.model.Genres
 import com.github.filipelipan.upcomingmovies.model.Movie
 import com.github.filipelipan.upcomingmovies.model.PagedResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,4 +21,41 @@ import javax.inject.Inject
 /**
  * Created by lispa on 16/12/2017.
  */
-class MovieDetailViewModel @Inject constructor() : ViewModel()
+class MovieDetailViewModel @Inject constructor(val genreRepository: GenreRepository) : ViewModel() {
+
+    //TODO create a base view model class
+    val disposables = CompositeDisposable();
+
+    val mGenres = MutableLiveData<Resource<Genres>>()
+
+    //get genres and cache
+    fun getGenres() {
+        mGenres.value = Resource.loading(null)
+
+        disposables.add(genreRepository.get("en-US")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableObserver<Genres>() {
+                    override fun onComplete() {}
+
+                    override fun onNext(genres: Genres) {
+                        mGenres.value = Resource.success(genres)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        IErrorHandlerHelper.defaultErrorResolver(e);
+
+                        //TODO refactor resource error to work better with rx error event bus
+                        mGenres.value = Resource.error("", null)
+                    }
+                }))
+    }
+
+    fun addDisposable(disposable: Disposable) {
+        disposables.add(disposable)
+    }
+
+    fun detachView() {
+        disposables.clear()
+    }
+}

@@ -4,8 +4,10 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.github.filipelipan.upcomingmovies.data.api.IRestApiService
+import com.github.filipelipan.upcomingmovies.data.cache.GenreRepository
 import com.github.filipelipan.upcomingmovies.error.IErrorHandlerHelper
 import com.github.filipelipan.upcomingmovies.livedata_resources.PagedResource
+import com.github.filipelipan.upcomingmovies.model.Genres
 import com.github.filipelipan.upcomingmovies.model.Movie
 import com.github.filipelipan.upcomingmovies.model.PagedResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,7 +20,7 @@ import javax.inject.Inject
 /**
  * Created by lispa on 16/12/2017.
  */
-class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService) : ViewModel() {
+class MoviesGridViewModel @Inject constructor(val restApi: IRestApiService, val genreRepository: GenreRepository) : ViewModel() {
     var nextPage = 1
 
     var search = ""

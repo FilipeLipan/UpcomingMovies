@@ -3,6 +3,7 @@ package com.github.filipelipan.upcomingmovies.di
 import com.github.filipelipan.upcomingmovies.BuildConfig
 import com.github.filipelipan.upcomingmovies.app.App
 import com.github.filipelipan.upcomingmovies.data.api.IRestApiService
+import com.github.filipelipan.upcomingmovies.data.cache.GenreRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -93,6 +94,12 @@ class AppModule {
             val request = requestBuilder.build()
             chain.proceed(request)
         }
+    }
+
+    @Reusable
+    @Provides
+    internal fun providerGenreRepository(restApi: IRestApiService): GenreRepository {
+        return GenreRepository(provideApp().cacheDir, restApi)
     }
 
 }

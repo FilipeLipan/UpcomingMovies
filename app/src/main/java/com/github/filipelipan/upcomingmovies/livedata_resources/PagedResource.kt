@@ -1,7 +1,5 @@
 package com.github.filipelipan.upcomingmovies.livedata_resources
 
-import com.github.filipelipan.upcomingmovies.model.Movie
-
 /**
  * Created by lispa on 16/12/2017.
  */
