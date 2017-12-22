@@ -5,10 +5,13 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.util.Pair
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.SearchView
 import android.transition.Explode
+import android.transition.TransitionSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -89,7 +92,14 @@ class MoviesGridFragment : BaseFragment<MoviesGridViewModel>(),BaseQuickAdapter.
         }
 
         mMoviesAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            context!!.startActivity(DetailActivity.getIntent(context!!, adapter!!.getItem(position) as Movie))
+
+            var imageView = view.findViewById<ImageView>(R.id._vMovieGridItemIV)
+
+            var p1: Pair<View, String>  = Pair.create(imageView, getString(R.string.grid_image_transition_name))
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                activity!!, p1);
+            context!!.startActivity(DetailActivity.getIntent(context!!, adapter!!.getItem(position) as Movie), options.toBundle())
         }
 
         mViewModel.mMovies.observe(this, Observer {

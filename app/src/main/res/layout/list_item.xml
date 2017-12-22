@@ -9,5 +9,6 @@
         android:layout_height="@dimen/grid_list_item_height"
         android:adjustViewBounds="true"
         android:orientation="vertical"
+        android:transitionName="teste"
         android:scaleType="centerCrop" />
 </LinearLayout>

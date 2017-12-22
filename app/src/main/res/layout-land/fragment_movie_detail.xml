@@ -20,6 +20,7 @@
             android:minHeight="300dp"
             app:arc_cropDirection="cropOutside"
             app:arc_height="50dp"
+            android:transitionName="@string/grid_image_transition_name"
             app:arc_position="right"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
