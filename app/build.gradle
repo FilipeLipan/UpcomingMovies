@@ -1,0 +1,114 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: "kotlin-kapt"
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.github.filipelipan.upcomingmovies"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            postprocessing {
+                removeUnusedCode false
+                removeUnusedResources false
+                obfuscate false
+                optimizeCode false
+                proguardFile 'proguard-rules.pro'
+            }
+        }
+    }
+
+    buildTypes.each {
+        it.buildConfigField 'String', 'MOVIES_DB_API_KEY', MyMoviesDBApiKey
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        dev {
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+            buildConfigField 'String', 'HOST', '"https://api.themoviedb.org/3/"'
+            buildConfigField 'String', 'BASE_POSTER_URL', '"http://image.tmdb.org/t/p/w185"'
+            buildConfigField 'String', 'BASE_POSTER_URL_HD', '"http://image.tmdb.org/t/p/w342"'
+        }
+        prod {
+            applicationIdSuffix ".prod"
+            versionNameSuffix "-prod"
+            buildConfigField 'String', 'HOST', '"https://api.themoviedb.org/3/"'
+            buildConfigField 'String', 'BASE_POSTER_URL', '"http://image.tmdb.org/t/p/w185"'
+            buildConfigField 'String', 'BASE_POSTER_URL_HD', '"http://image.tmdb.org/t/p/w500"'
+        }
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+kapt {
+    generateStubs = true
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    //Android Architecture Components
+    implementation "android.arch.lifecycle:runtime:$arch_version"
+    implementation "android.arch.lifecycle:extensions:$arch_version"
+
+    //Dagger2
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    provided 'javax.annotation:jsr250-api:1.0'
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+    // Rx
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+
+    // Retrofit & OkHttp
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    // OkHttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "de.hdodenhof:circleimageview:$circleImageViewVersion"
+
+    //BaseRecyclerViewAdapterHelper
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'
+
+//    https://github.com/florent37/ArcLayout
+    implementation "com.github.florent37:arclayout:$arcLayoutVersion"
+    implementation "com.flaviofaria:kenburnsview:$kenburnsViewVersion"
+
+    // Rx
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation "com.github.VictorAlbertos.RxCache:runtime:$rootProject.rxCacheVersion"
+    kapt "com.github.VictorAlbertos.RxCache:compiler:$rootProject.rxCacheVersion"
+    implementation "com.github.VictorAlbertos.Jolyglot:gson:$rootProject.rxCacheGsonVersion"
+}

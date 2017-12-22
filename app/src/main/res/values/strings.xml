@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">UpcomingMovies</string>
+    <string name="main_activity_name">Main</string>
+    <string name="movies_grid_title">Movies Grid</string>
+
+    <string name="load_failed">Loading failed</string>
+    <string name="load_end"></string>
+    <string name="search">Search</string>
+    <string name="movie_detail">Movie Detail</string>
+    <string name="overview">OverView</string>
+    <string name="genres">Genres</string>
+    <string name="release_date">Release date</string>
+    <string name="rating">Rating</string>
+    <string name="movie_detail_title"></string>
+    <string name="empty_list">No Results</string>
+    <string name="loading_failed">Loading failed</string>
+    <string name="err_connection_error">Impossible to connect, check your connection</string>
+    <string name="err_unauthorized">Unauthorized</string>
+    <string name="genre_not_available">Not available</string>
+
+    <string name="grid_image_transition_name" translatable="false">grid_image_transition_name</string>
+</resources>
